@@ -155,6 +155,8 @@ class API {
 
     // * PUBLIC METHODS *
 
+    public impersonate = (userId: number) => {};
+
     /**
      * @description Logs a given user in
      * @returns The authentification token
