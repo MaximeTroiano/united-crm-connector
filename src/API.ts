@@ -4,24 +4,26 @@ import { ApiPosition } from "./interfaces/ApiPosition";
 
 class API {
     // * VARIABLES *
+    /** @description This variable contains the token of the user */
+    public token!: string;
+
+    /** @description 0 = none, 1 = normal, 2 = detailed, 3 = detailed + results */
+    public debug_level: number = 1;
 
     /** @description This variable will containe the start time of any request */
-    start!: number;
+    private start!: number;
 
     /** @description This variable will containe the end time of any request */
-    end!: number;
-
-    /** @description This variable contains the token of the user */
-    token!: string;
+    private end!: number;
 
     /** @description The variable that will contain the AXIOS instance */
-    instance: AxiosInstance;
+    private instance: AxiosInstance;
 
     /** @description The URL to the CRM backend */
-    api_url: string = "http://localhost:4000";
+    private api_url: string = "http://localhost:4000";
 
     /** @description The timeout time to the API */
-    api_timeout: number = 1000;
+    private api_timeout: number = 1000;
 
     // * CONSTRUCTOR *
     constructor() {
@@ -34,6 +36,8 @@ class API {
      * @returns An axios instance
      */
     private init = () => {
+        if (this.debug_level >= 2) this.log.message("Axios has been intitialized");
+
         return axios.create({
             baseURL: this.api_url,
             timeout: this.api_timeout
@@ -41,19 +45,22 @@ class API {
     };
 
     private handleResponse = (response: AxiosResponse<any>) => {
+        if (this.debug_level >= 2) this.log.message("Response is being handled");
         // Get the result data of the request
         let data = response.data;
 
         // If no success, redirect to the error function
         if (!data.success) return this.handleError(response);
 
-        this.log.success();
+        if (this.debug_level >= 2) this.log.success();
+        if (this.debug_level == 3) this.log.result(data.data);
 
         // Return the resulting data;
         return data.data;
     };
 
     private handleError = (response: AxiosResponse<any>) => {
+        if (this.debug_level >= 2) this.log.message("Response was of type error");
         // Get the result data of the request
         let data = response.data;
 
@@ -69,6 +76,8 @@ class API {
      */
     private log = {
         error: (...m: Array<string | number>) => {
+            if (this.debug_level == 0) return;
+
             this.end = new Date().getTime();
             console.error(
                 `    ${colors.fgred}[ERROR in ${this.end - this.start}ms]`,
@@ -78,6 +87,7 @@ class API {
         },
 
         success: (...m: Array<string | number>) => {
+            if (this.debug_level == 0) return;
             this.end = new Date().getTime();
             console.error(
                 `    ${colors.fggreen}[SUCCESS in ${this.end - this.start}ms]`,
@@ -87,16 +97,28 @@ class API {
         },
 
         request: (...m: Array<string | number>) => {
+            if (this.debug_level == 0) return;
             this.start = new Date().getTime();
             console.error(`${colors.fgblue}[API REQUEST]`, m.join(" "), colors.reset);
         },
 
         result: (...m: Array<string | number>) => {
-            console.error(`    ${colors.fgyellow}[RESULT]`, m.join(" "), colors.reset);
+            if (this.debug_level == 0) return;
+            console.error(
+                `    ${colors.fgyellow}[RESULT]`,
+                m.map(mm => JSON.stringify(mm)).join(" "),
+                colors.reset
+            );
+        },
+
+        message: (...m: Array<string | number>) => {
+            if (this.debug_level == 0) return;
+            console.error(`    ${colors.fgcyan}[MESSAGE]`, m.join(" "), colors.reset);
         }
     };
 
     private authHeader = () => {
+        if (this.debug_level >= 2) this.log.message("Generate auth header");
         return {
             headers: {
                 Authorization: `Bearer ${this.token}`
@@ -116,7 +138,7 @@ class API {
             .post("/auth/login", { username, password })
             .then(this.handleResponse)
             .then(token => {
-                this.log.result("Token length", token.length);
+                if (this.debug_level == 3) this.log.result("Token length", token.length);
                 this.token = token;
             })
             .catch(this.handleError);
@@ -150,7 +172,7 @@ class API {
     public findOne = async (entity: string, where: object) => {
         this.log.request("Find one", entity);
         return this.instance
-            .get(`/data/${entity}?where=${JSON.stringify(where)}`, this.authHeader())
+            .get(`/data/${entity}/one?where=${JSON.stringify(where)}`, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
