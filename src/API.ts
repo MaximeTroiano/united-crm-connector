@@ -67,6 +67,8 @@ class API {
         // Get the result data of the request
         let data = response.data;
 
+        console.log("Response", response);
+
         // Log the error
         this.log.error(data.error.name, data.error.message);
 

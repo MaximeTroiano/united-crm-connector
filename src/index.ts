@@ -9,6 +9,10 @@ const test = async () => {
 
     await x.login("Maxime", "test");
 
+    await x.find("users");
+
+    return;
+
     let company = await x.save("customers", { name: "Maxime's Company", vat: "BE0589.625.366" });
 
     //await x.find("customers");
