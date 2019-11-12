@@ -1,6 +1,6 @@
 import API from "./API";
 
-let x = new API();
+let x = new API("http://localhost:4000");
 
 const test = async () => {
     console.log("[TEST] Started");

@@ -20,13 +20,15 @@ class API {
     private instance: AxiosInstance;
 
     /** @description The URL to the CRM backend */
-    private api_url: string = "http://localhost:4000";
+    private api_url?: string;
 
     /** @description The timeout time to the API */
     private api_timeout: number = 1000;
 
     // * CONSTRUCTOR *
-    constructor() {
+    constructor(api_url: string) {
+        if (!api_url) throw new Error("No API url has been set");
+        this.api_url = api_url;
         this.instance = this.init();
     }
 
