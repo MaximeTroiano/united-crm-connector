@@ -2,7 +2,7 @@ var path = require("path");
 
 module.exports = {
     // Change to your "entry-point".
-    entry: "./src/index",
+    entry: ["@babel/polyfill", "./src/API"],
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "app.bundle.js"
