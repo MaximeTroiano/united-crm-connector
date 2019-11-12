@@ -167,6 +167,7 @@ class API {
             .then(token => {
                 if (this.debug_level == 3) this.log.result(1, "Token length", token.length);
                 this.token = token;
+                return token;
             })
             .catch(this.handleError);
     };
