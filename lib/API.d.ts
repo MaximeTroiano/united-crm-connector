@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime";
 import { ApiPosition } from "./interfaces/ApiPosition";
 declare class API {
     /** @description This variable contains the token of the user */
