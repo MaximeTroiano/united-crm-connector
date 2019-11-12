@@ -1,0 +1,26 @@
+declare const colors: {
+    reset: string;
+    bright: string;
+    dim: string;
+    underscore: string;
+    blink: string;
+    reverse: string;
+    hidden: string;
+    fgblack: string;
+    fgred: string;
+    fggreen: string;
+    fgyellow: string;
+    fgblue: string;
+    fgmagenta: string;
+    fgcyan: string;
+    fgwhite: string;
+    bgblack: string;
+    bgred: string;
+    bggreen: string;
+    bgyellow: string;
+    bgblue: string;
+    bgmagenta: string;
+    bgcyan: string;
+    bgwhite: string;
+};
+export default colors;
