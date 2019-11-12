@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime";
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from "axios";
 import colors from "./const/colors";
 import { ApiPosition } from "./interfaces/ApiPosition";
