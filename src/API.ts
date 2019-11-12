@@ -85,7 +85,7 @@ class API {
             if (this.debug_level == 0) return;
 
             this.end = new Date().getTime();
-            console.error(
+            console.log(
                 this.log.createIndent(i),
                 `${colors.fgred}[ERROR in ${this.end - this.start}ms]`,
                 m.join(" "),
@@ -96,7 +96,7 @@ class API {
         success: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
             this.end = new Date().getTime();
-            console.error(
+            console.log(
                 this.log.createIndent(i),
                 `${colors.fggreen}[SUCCESS in ${this.end - this.start}ms]`,
                 m.join(" "),
@@ -107,7 +107,7 @@ class API {
         request: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
             this.start = new Date().getTime();
-            console.error(
+            console.log(
                 this.log.createIndent(i),
                 `${colors.fgblue}[API REQUEST]`,
                 m.join(" "),
@@ -117,7 +117,7 @@ class API {
 
         result: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
-            console.error(
+            console.log(
                 this.log.createIndent(i),
                 `${colors.fgyellow}[RESULT]`,
                 m.map(mm => JSON.stringify(mm)).join(" "),
@@ -127,7 +127,7 @@ class API {
 
         message: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
-            console.error(
+            console.log(
                 this.log.createIndent(i),
                 `${colors.fgcyan}[MESSAGE]`,
                 m.join(" "),
@@ -169,6 +169,7 @@ class API {
             .then(token => {
                 if (this.debug_level == 3) this.log.result(1, "Token length", token.length);
                 this.token = token;
+                return token;
             })
             .catch(this.handleError);
     };
