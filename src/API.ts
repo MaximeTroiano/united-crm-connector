@@ -7,6 +7,7 @@ class API {
 
     /** @description This variable will containe the start time of any request */
     start!: number;
+
     /** @description This variable will containe the end time of any request */
     end!: number;
 
@@ -67,7 +68,7 @@ class API {
      * @description Custom logging function
      */
     private log = {
-        error: (...m: Array<any>) => {
+        error: (...m: Array<string | number>) => {
             this.end = new Date().getTime();
             console.error(
                 `    ${colors.fgred}[ERROR in ${this.end - this.start}ms]`,
@@ -76,7 +77,7 @@ class API {
             );
         },
 
-        success: (...m: Array<any>) => {
+        success: (...m: Array<string | number>) => {
             this.end = new Date().getTime();
             console.error(
                 `    ${colors.fggreen}[SUCCESS in ${this.end - this.start}ms]`,
@@ -85,12 +86,12 @@ class API {
             );
         },
 
-        request: (...m: Array<any>) => {
+        request: (...m: Array<string | number>) => {
             this.start = new Date().getTime();
             console.error(`${colors.fgblue}[API REQUEST]`, m.join(" "), colors.reset);
         },
 
-        result: (...m: Array<any>) => {
+        result: (...m: Array<string | number>) => {
             console.error(`    ${colors.fgyellow}[RESULT]`, m.join(" "), colors.reset);
         }
     };
@@ -125,8 +126,12 @@ class API {
      * @description Get the list of any entity
      * @returns The requested data
      */
-    public find = async (entity: string, where: object = {}, position: ApiPosition = {}) => {
-        this.log.request("Find", entity, position.skip, position.take);
+    public find = async (
+        entity: string,
+        where: object = {},
+        position: ApiPosition = { take: 50, skip: 0 }
+    ) => {
+        this.log.request("Find", entity, position.skip || 0, position.take || 50);
         return this.instance
             .get(
                 `/data/${entity}?where=${JSON.stringify(where)}&skip=${position.skip}&take=${
@@ -158,6 +163,44 @@ class API {
         this.log.request("Find by id", entity, id);
         return this.instance
             .get(`/data/${entity}/${id}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Save an element to the database
+     * @returns The resulting data
+     */
+    public save = async (entity: string, data: object) => {
+        this.log.request("Save", entity);
+        return this.instance
+            .post(`/data/${entity}`, data, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Removes an element from the database
+     * @returns The resulting data
+     */
+    public remove = async (entity: string, id: number) => {
+        this.log.request("Remove", entity, id);
+        return this.instance
+            .delete(`/data/${entity}/${id}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Removes an element from the database
+     * @returns The resulting data
+     */
+    public config = async (entity: string | null = null) => {
+        const URL = !entity ? "/config" : `/config/${entity}`;
+
+        this.log.request("Config", entity || "global");
+        return this.instance
+            .get(URL, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
