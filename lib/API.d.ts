@@ -5,6 +5,8 @@ declare class API {
     token: string;
     /** @description 0 = none, 1 = normal, 2 = detailed, 3 = detailed + results */
     debug_level: number;
+    /** @description Extra indent for logs */
+    logs_indent: number;
     /** @description This variable will containe the start time of any request */
     private start;
     /** @description This variable will containe the end time of any request */

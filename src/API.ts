@@ -11,6 +11,9 @@ class API {
     /** @description 0 = none, 1 = normal, 2 = detailed, 3 = detailed + results */
     public debug_level: number = 1;
 
+    /** @description Extra indent for logs */
+    public logs_indent: number = 0;
+
     /** @description This variable will containe the start time of any request */
     private start!: number;
 
@@ -39,7 +42,7 @@ class API {
      * @returns An axios instance
      */
     private init = () => {
-        if (this.debug_level >= 2) this.log.message("Axios has been intitialized");
+        if (this.debug_level >= 2) this.log.message(1, "Axios has been intitialized");
 
         return axios.create({
             baseURL: this.api_url,
@@ -48,22 +51,22 @@ class API {
     };
 
     private handleResponse = (response: AxiosResponse<any>) => {
-        if (this.debug_level >= 2) this.log.message("Response is being handled");
+        if (this.debug_level >= 2) this.log.message(1, "Response is being handled");
         // Get the result data of the request
         let data = response.data;
 
         // If no success, redirect to the error function
         if (!data.success) return this.handleError(response);
 
-        if (this.debug_level >= 2) this.log.success();
-        if (this.debug_level == 3) this.log.result(data.data);
+        if (this.debug_level >= 2) this.log.success(1);
+        if (this.debug_level == 3) this.log.result(1, data.data);
 
         // Return the resulting data;
         return data.data;
     };
 
     private handleError = (response: AxiosResponse<any>) => {
-        if (this.debug_level >= 2) this.log.message("Response was of type error");
+        if (this.debug_level >= 2) this.log.message(1, "Response was of type error");
         // Get the result data of the request
         let data = response.data;
 
@@ -78,50 +81,71 @@ class API {
      * @description Custom logging function
      */
     private log = {
-        error: (...m: Array<string | number>) => {
+        error: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
 
             this.end = new Date().getTime();
             console.error(
-                `    ${colors.fgred}[ERROR in ${this.end - this.start}ms]`,
+                this.log.createIndent(i),
+                `${colors.fgred}[ERROR in ${this.end - this.start}ms]`,
                 m.join(" "),
                 colors.reset
             );
         },
 
-        success: (...m: Array<string | number>) => {
+        success: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
             this.end = new Date().getTime();
             console.error(
-                `    ${colors.fggreen}[SUCCESS in ${this.end - this.start}ms]`,
+                this.log.createIndent(i),
+                `${colors.fggreen}[SUCCESS in ${this.end - this.start}ms]`,
                 m.join(" "),
                 colors.reset
             );
         },
 
-        request: (...m: Array<string | number>) => {
+        request: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
             this.start = new Date().getTime();
-            console.error(`${colors.fgblue}[API REQUEST]`, m.join(" "), colors.reset);
+            console.error(
+                this.log.createIndent(i),
+                `${colors.fgblue}[API REQUEST]`,
+                m.join(" "),
+                colors.reset
+            );
         },
 
-        result: (...m: Array<string | number>) => {
+        result: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
             console.error(
-                `    ${colors.fgyellow}[RESULT]`,
+                this.log.createIndent(i),
+                `${colors.fgyellow}[RESULT]`,
                 m.map(mm => JSON.stringify(mm)).join(" "),
                 colors.reset
             );
         },
 
-        message: (...m: Array<string | number>) => {
+        message: (i: number = 0, ...m: Array<string | number>) => {
             if (this.debug_level == 0) return;
-            console.error(`    ${colors.fgcyan}[MESSAGE]`, m.join(" "), colors.reset);
+            console.error(
+                this.log.createIndent(i),
+                `${colors.fgcyan}[MESSAGE]`,
+                m.join(" "),
+                colors.reset
+            );
+        },
+
+        createIndent: (n: number) => {
+            let indent = "";
+            for (let i = 0; i < n + this.logs_indent; i++) {
+                indent += "    ";
+            }
+            return indent;
         }
     };
 
     private authHeader = () => {
-        if (this.debug_level >= 2) this.log.message("Generate auth header");
+        if (this.debug_level >= 2) this.log.message(1, "Generate auth header");
         return {
             headers: {
                 Authorization: `Bearer ${this.token}`
@@ -136,12 +160,12 @@ class API {
      * @returns The authentification token
      */
     public login = async (username: string, password: string) => {
-        this.log.request("Login", username);
+        this.log.request(0, "Login", username);
         return this.instance
             .post("/auth/login", { username, password })
             .then(this.handleResponse)
             .then(token => {
-                if (this.debug_level == 3) this.log.result("Token length", token.length);
+                if (this.debug_level == 3) this.log.result(1, "Token length", token.length);
                 this.token = token;
             })
             .catch(this.handleError);
@@ -156,7 +180,7 @@ class API {
         where: object = {},
         position: ApiPosition = { take: 50, skip: 0 }
     ) => {
-        this.log.request("Find", entity, position.skip || 0, position.take || 50);
+        this.log.request(0, "Find", entity, position.skip || 0, position.take || 50);
         return this.instance
             .get(
                 `/data/${entity}?where=${JSON.stringify(where)}&skip=${position.skip}&take=${
@@ -173,7 +197,7 @@ class API {
      * @returns The requested data
      */
     public findOne = async (entity: string, where: object) => {
-        this.log.request("Find one", entity);
+        this.log.request(0, "Find one", entity);
         return this.instance
             .get(`/data/${entity}/one?where=${JSON.stringify(where)}`, this.authHeader())
             .then(this.handleResponse)
@@ -185,7 +209,7 @@ class API {
      * @returns The requested data
      */
     public findById = async (entity: string, id: number) => {
-        this.log.request("Find by id", entity, id);
+        this.log.request(0, "Find by id", entity, id);
         return this.instance
             .get(`/data/${entity}/${id}`, this.authHeader())
             .then(this.handleResponse)
@@ -197,7 +221,7 @@ class API {
      * @returns The resulting data
      */
     public save = async (entity: string, data: object) => {
-        this.log.request("Save", entity);
+        this.log.request(0, "Save", entity);
         return this.instance
             .post(`/data/${entity}`, data, this.authHeader())
             .then(this.handleResponse)
@@ -209,7 +233,7 @@ class API {
      * @returns The resulting data
      */
     public remove = async (entity: string, id: number) => {
-        this.log.request("Remove", entity, id);
+        this.log.request(0, "Remove", entity, id);
         return this.instance
             .delete(`/data/${entity}/${id}`, this.authHeader())
             .then(this.handleResponse)
@@ -223,7 +247,7 @@ class API {
     public config = async (entity: string | null = null) => {
         const URL = !entity ? "/config" : `/config/${entity}`;
 
-        this.log.request("Config", entity || "global");
+        this.log.request(0, "Config", entity || "global");
         return this.instance
             .get(URL, this.authHeader())
             .then(this.handleResponse)
