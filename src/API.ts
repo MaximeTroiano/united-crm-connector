@@ -66,12 +66,20 @@ class API {
     };
 
     private handleError = (response: AxiosResponse<any>) => {
+        if (!response.data) {
+            this.log.error(1, `The endpoint didn't respond after ${this.api_timeout}ms`);
+            return {
+                name: "SERVER_DOWN",
+                message: "The server is currently unavailable"
+            };
+        }
+
         if (this.debug_level >= 2) this.log.message(1, "Response was of type error");
         // Get the result data of the request
         let data = response.data;
 
         // Log the error
-        this.log.error(data.error.name, data.error.message);
+        this.log.error(1, data.error.name, data.error.message);
 
         // Return the error
         return data.error;
@@ -155,7 +163,15 @@ class API {
 
     // * PUBLIC METHODS *
 
-    public impersonate = (userId: number) => {};
+    /**
+     * todo Implement impersonation in backend
+     * @description Impersonate a user
+     * @returns OK or NOK
+     */
+    public impersonate = (userId: number) => {
+        this.log.request(0, "Impersonate", userId);
+        this.log.error(1, "Impersonation has not been implemented yet");
+    };
 
     /**
      * @description Logs a given user in
@@ -220,6 +236,18 @@ class API {
     };
 
     /**
+     * @description Get related elements of record
+     * @returns The requested data
+     */
+    public findRelated = async (entity: string, id: number, relation: string) => {
+        this.log.request(0, "Find related of id", entity, id);
+        return this.instance
+            .get(`/data/${entity}/${id}/${relation}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
      * @description Save an element to the database
      * @returns The resulting data
      */
@@ -227,6 +255,24 @@ class API {
         this.log.request(0, "Save", entity);
         return this.instance
             .post(`/data/${entity}`, data, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Save a relation to the database
+     * @returns The resulting data
+     */
+    public saveRelated = async (
+        entity: string,
+        entityId: number,
+        relation: string,
+        relationId: number,
+        data: object = {}
+    ) => {
+        this.log.request(0, "Save related", entity, entityId, relation, relationId);
+        return this.instance
+            .post(`/data/${entity}/${entityId}/${relation}/${relationId}`, data, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };

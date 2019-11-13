@@ -11,12 +11,14 @@ const test = async () => {
 
     await x.find("users");
 
-    x.impersonate(3);
+    await x.saveRelated("customers", 1, "employees", 2);
 
-    return;
+    await x.findRelated("customers", 1, "employees");
+
+    //await x.impersonate(3);
 
     let company = await x.save("customers", { name: "Maxime's Company", vat: "BE0589.625.366" });
-
+    return;
     //await x.find("customers");
 
     await x.findOne("customers", { name: "Maxime's Company" });
