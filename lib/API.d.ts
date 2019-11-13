@@ -31,6 +31,12 @@ declare class API {
     private log;
     private authHeader;
     /**
+     * todo Implement impersonation in backend
+     * @description Impersonate a user
+     * @returns OK or NOK
+     */
+    impersonate: (userId: number) => void;
+    /**
      * @description Logs a given user in
      * @returns The authentification token
      */
@@ -51,10 +57,20 @@ declare class API {
      */
     findById: (entity: string, id: number) => Promise<any>;
     /**
+     * @description Get related elements of record
+     * @returns The requested data
+     */
+    findRelated: (entity: string, id: number, relation: string) => Promise<any>;
+    /**
      * @description Save an element to the database
      * @returns The resulting data
      */
     save: (entity: string, data: object) => Promise<any>;
+    /**
+     * @description Save a relation to the database
+     * @returns The resulting data
+     */
+    saveRelated: (entity: string, entityId: number, relation: string, relationId: number, data?: object) => Promise<any>;
     /**
      * @description Removes an element from the database
      * @returns The resulting data
