@@ -22,9 +22,9 @@ const test = async () => {
 
     await x.findOne("customers", { name: "Maxime's Company" });
 
-    await x.findById("customers", company.id);
+    await x.findById("customers", company.data.id);
 
-    await x.remove("customers", company.id);
+    await x.remove("customers", company.data.id);
 
     //await x.config("customers");
 

@@ -62,7 +62,7 @@ class API {
         if (this.debug_level == 3) this.log.result(1, data.data);
 
         // Return the resulting data;
-        return data.data;
+        return data;
     };
 
     private handleError = (response: AxiosResponse<any>) => {
@@ -183,8 +183,8 @@ class API {
             .post("/auth/login", { username, password })
             .then(this.handleResponse)
             .then(token => {
-                if (this.debug_level == 3) this.log.result(1, "Token length", token.length);
-                this.token = token;
+                if (this.debug_level == 3) this.log.result(1, "Token length", token.data.length);
+                this.token = token.data;
                 return token;
             })
             .catch(this.handleError);
