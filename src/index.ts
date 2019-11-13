@@ -18,7 +18,6 @@ const test = async () => {
     //await x.impersonate(3);
 
     let company = await x.save("customers", { name: "Maxime's Company", vat: "BE0589.625.366" });
-    return;
     //await x.find("customers");
 
     await x.findOne("customers", { name: "Maxime's Company" });
