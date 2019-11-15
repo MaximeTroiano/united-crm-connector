@@ -45,7 +45,7 @@ declare class API {
      * @description Get the list of any entity
      * @returns The requested data
      */
-    find: (entity: string, where?: object, position?: ApiPosition) => Promise<any>;
+    find: (entity: string, where?: object, position?: ApiPosition, order?: string) => Promise<any>;
     /**
      * @description Get one element of an entity
      * @returns The requested data

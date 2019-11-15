@@ -197,14 +197,15 @@ class API {
     public find = async (
         entity: string,
         where: object = {},
-        position: ApiPosition = { take: 50, skip: 0 }
+        position: ApiPosition = { take: 50, skip: 0 },
+        order: string = ""
     ) => {
         this.log.request(0, "Find", entity, position.skip || 0, position.take || 50);
         return this.instance
             .get(
                 `/data/${entity}?where=${JSON.stringify(where)}&skip=${position.skip}&take=${
                     position.take
-                }`,
+                }&order=${order}`,
                 this.authHeader()
             )
             .then(this.handleResponse)
