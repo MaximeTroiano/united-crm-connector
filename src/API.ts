@@ -213,6 +213,26 @@ class API {
     };
 
     /**
+     * @description Get the list of any entity with a search criteria
+     * @returns The requested data
+     */
+    public search = async (
+        entity: string,
+        search: string,
+        position: ApiPosition = { take: 50, skip: 0 },
+        order: string = ""
+    ) => {
+        this.log.request(0, "Search", entity, search, position.skip || 0, position.take || 50);
+        return this.instance
+            .get(
+                `/data/${entity}?search=${search}&skip=${position.skip}&take=${position.take}&order=${order}`,
+                this.authHeader()
+            )
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
      * @description Get one element of an entity
      * @returns The requested data
      */
