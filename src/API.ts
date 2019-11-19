@@ -8,6 +8,9 @@ class API {
     /** @description This variable contains the token of the user */
     public token!: string;
 
+    /** @description This variable contains the onError function */
+    public onError!: Function;
+
     /** @description 0 = none, 1 = normal, 2 = detailed, 3 = detailed + results */
     public debug_level: number = 1;
 
@@ -80,6 +83,8 @@ class API {
 
         // Log the error
         this.log.error(1, data.error.name, data.error.message);
+
+        if (this.onError) this.onError(data.error);
 
         // Return the error
         return data.error;

@@ -9,6 +9,12 @@ const test = async () => {
 
     await x.login("Maxime", "test");
 
+    x.onError = function(error: any) {
+        console.log("Custom error handling is working !!", error);
+    };
+
+    await x.login("sdjfh", "sjdfhk");
+
     //await x.find("users");
 
     //await x.saveRelated("customers", 1, "employees", 2);

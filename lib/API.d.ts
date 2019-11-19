@@ -3,6 +3,8 @@ import { ApiPosition } from "./interfaces/ApiPosition";
 declare class API {
     /** @description This variable contains the token of the user */
     token: string;
+    /** @description This variable contains the onError function */
+    onError: Function;
     /** @description 0 = none, 1 = normal, 2 = detailed, 3 = detailed + results */
     debug_level: number;
     /** @description Extra indent for logs */
