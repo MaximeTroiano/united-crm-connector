@@ -3,8 +3,6 @@ import { ApiPosition } from "./interfaces/ApiPosition";
 declare class API {
     /** @description This variable contains the token of the user */
     token: string;
-    /** @description This variable contains the onError function */
-    onError: Function;
     /** @description 0 = none, 1 = normal, 2 = detailed, 3 = detailed + results */
     debug_level: number;
     /** @description Extra indent for logs */
@@ -25,6 +23,7 @@ declare class API {
      * @returns An axios instance
      */
     private init;
+    onError: Function;
     private handleResponse;
     private handleError;
     /**
@@ -73,16 +72,19 @@ declare class API {
      * @returns The resulting data
      */
     save: (entity: string, data: object) => Promise<any>;
+    onSave: Function;
     /**
      * @description Save a relation to the database
      * @returns The resulting data
      */
     saveRelated: (entity: string, entityId: number, relation: string, relationId: number, data?: object) => Promise<any>;
+    onSaveRelated: Function;
     /**
      * @description Removes an element from the database
      * @returns The resulting data
      */
     remove: (entity: string, id: number) => Promise<any>;
+    onRemove: Function;
     /**
      * @description Removes an element from the database
      * @returns The resulting data
