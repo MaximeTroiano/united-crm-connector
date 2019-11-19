@@ -9,8 +9,12 @@ const test = async () => {
 
     await x.login("Maxime", "test");
 
-    x.onError = function(error: any) {
+    x.onError = (error: any) => {
         console.log("Custom error handling is working !!", error);
+    };
+
+    x.onSave = (entity: string, data: object) => {
+        console.log("Custom save function", entity, data);
     };
 
     await x.login("sdjfh", "sjdfhk");
@@ -23,7 +27,7 @@ const test = async () => {
 
     //await x.impersonate(3);
 
-    //let company = await x.save("customers", { name: "gaëtan's Company", vat: "BE0589.625.366" });
+    let company = await x.save("customers", { name: "gaëtan's Company", vat: "BE0589.625.366" });
     //await x.find("customers");
 
     //await x.findOne("customers", { name: "Maxime's Company" });

@@ -8,9 +8,6 @@ class API {
     /** @description This variable contains the token of the user */
     public token!: string;
 
-    /** @description This variable contains the onError function */
-    public onError!: Function;
-
     /** @description 0 = none, 1 = normal, 2 = detailed, 3 = detailed + results */
     public debug_level: number = 1;
 
@@ -53,6 +50,7 @@ class API {
         });
     };
 
+    public onError!: Function;
     private handleResponse = (response: AxiosResponse<any>) => {
         if (this.debug_level >= 2) this.log.message(1, "Response is being handled");
         // Get the result data of the request
@@ -278,12 +276,15 @@ class API {
      * @returns The resulting data
      */
     public save = async (entity: string, data: object) => {
+        if (this.onSave) this.onSave(entity, data);
+
         this.log.request(0, "Save", entity);
         return this.instance
             .post(`/data/${entity}`, data, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+    public onSave!: Function;
 
     /**
      * @description Save a relation to the database
@@ -296,24 +297,30 @@ class API {
         relationId: number,
         data: object = {}
     ) => {
+        if (this.onSaveRelated) this.onSaveRelated(entity, entityId, relation, relationId, data);
+
         this.log.request(0, "Save related", entity, entityId, relation, relationId);
         return this.instance
             .post(`/data/${entity}/${entityId}/${relation}/${relationId}`, data, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+    public onSaveRelated!: Function;
 
     /**
      * @description Removes an element from the database
      * @returns The resulting data
      */
     public remove = async (entity: string, id: number) => {
+        if (this.onRemove) this.onRemove(entity, id);
+
         this.log.request(0, "Remove", entity, id);
         return this.instance
             .delete(`/data/${entity}/${id}`, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+    public onRemove!: Function;
 
     /**
      * @description Removes an element from the database
