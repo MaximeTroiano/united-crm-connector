@@ -16,7 +16,7 @@ declare class API {
     /** @description The URL to the CRM backend */
     private api_url?;
     /** @description The timeout time to the API */
-    private api_timeout;
+    api_timeout: number;
     constructor(api_url: string);
     /**
      * @description Init the Axios instance with the URL and headers
