@@ -73,6 +73,7 @@ declare class API {
      */
     save: (entity: string, data: object) => Promise<any>;
     onSave: Function;
+    afterSave: Function;
     /**
      * @description Save a relation to the database
      * @returns The resulting data

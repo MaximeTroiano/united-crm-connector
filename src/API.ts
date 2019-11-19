@@ -281,10 +281,15 @@ class API {
         this.log.request(0, "Save", entity);
         return this.instance
             .post(`/data/${entity}`, data, this.authHeader())
+            .then(result => {
+                if (this.afterSave) this.afterSave(entity, data, result);
+                return result;
+            })
             .then(this.handleResponse)
             .catch(this.handleError);
     };
     public onSave!: Function;
+    public afterSave!: Function;
 
     /**
      * @description Save a relation to the database
