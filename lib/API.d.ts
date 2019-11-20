@@ -86,6 +86,7 @@ declare class API {
      */
     remove: (entity: string, id: number) => Promise<any>;
     onRemove: Function;
+    afterDelete: Function;
     /**
      * @description Removes an element from the database
      * @returns The resulting data
