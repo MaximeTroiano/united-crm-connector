@@ -313,6 +313,26 @@ class API {
     public onSaveRelated!: Function;
 
     /**
+     * @description Save a relation to the database
+     * @returns The resulting data
+     */
+    public deleteRelated = async (
+        entity: string,
+        entityId: number,
+        relation: string,
+        relationId: number
+    ) => {
+        if (this.onDeleteRelated) this.onDeleteRelated(entity, entityId, relation, relationId);
+
+        this.log.request(0, "Delete related", entity, entityId, relation, relationId);
+        return this.instance
+            .delete(`/data/${entity}/${entityId}/${relation}/${relationId}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+    public onDeleteRelated!: Function;
+
+    /**
      * @description Removes an element from the database
      * @returns The resulting data
      */
