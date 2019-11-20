@@ -322,10 +322,15 @@ class API {
         this.log.request(0, "Remove", entity, id);
         return this.instance
             .delete(`/data/${entity}/${id}`, this.authHeader())
+            .then(result => {
+                if (this.afterDelete) this.afterDelete(entity, id, result);
+                return result;
+            })
             .then(this.handleResponse)
             .catch(this.handleError);
     };
     public onRemove!: Function;
+    public afterDelete!: Function;
 
     /**
      * @description Removes an element from the database
