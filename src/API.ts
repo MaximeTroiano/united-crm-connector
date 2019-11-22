@@ -216,6 +216,29 @@ class API {
     };
 
     /**
+     * @description Get the list of values for a list
+     * @returns The requested data
+     */
+    public getListValues = async (listName: string) => {
+        this.log.request(0, "List of values", listName);
+        return this.instance
+            .get(`/list/${listName}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Get the list of values for a list
+     * @returns The requested data
+     */
+    public createListValue = async (listName: string, labels: object, values: object = {}) => {
+        this.log.request(0, "List of values", listName);
+        return this.instance
+            .post(`/list/${listName}`, { labels, values }, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+    /**
      * @description Get the list of any entity with a search criteria
      * @returns The requested data
      */

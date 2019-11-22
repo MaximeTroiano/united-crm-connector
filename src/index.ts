@@ -17,6 +17,15 @@ const test = async () => {
         console.log("Custom save function", entity, data);
     };
 
+    await x.createListValue(
+        "lov_employees_contract",
+        { en: "Test" },
+        { description: "This means a test contract" }
+    );
+    await x.createListValue("lov_employees_contract", { en: "None" });
+
+    await x.getListValues("lov_employees_contract");
+
     await x.login("sdjfh", "sjdfhk");
 
     //await x.find("users");

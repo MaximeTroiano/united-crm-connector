@@ -48,6 +48,16 @@ declare class API {
      */
     find: (entity: string, where?: object, position?: ApiPosition, order?: string) => Promise<any>;
     /**
+     * @description Get the list of values for a list
+     * @returns The requested data
+     */
+    getListValues: (listName: string) => Promise<any>;
+    /**
+     * @description Get the list of values for a list
+     * @returns The requested data
+     */
+    createListValue: (listName: string, labels: object, values?: object) => Promise<any>;
+    /**
      * @description Get the list of any entity with a search criteria
      * @returns The requested data
      */
