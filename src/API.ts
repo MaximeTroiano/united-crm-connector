@@ -286,10 +286,16 @@ class API {
      * @description Get related elements of record
      * @returns The requested data
      */
-    public findRelated = async (entity: string, id: number, relation: string) => {
+    public findRelated = async (
+        entity: string,
+        id: number,
+        relation: string,
+        where: object = {},
+        order: string = ""
+    ) => {
         this.log.request(0, "Find related of id", entity, id);
         return this.instance
-            .get(`/data/${entity}/${id}/${relation}`, this.authHeader())
+            .get(`/data/${entity}/${id}/${relation}?order=${order}`, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };

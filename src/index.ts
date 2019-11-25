@@ -32,7 +32,7 @@ const test = async () => {
 
     //await x.saveRelated("customers", 1, "employees", 2);
 
-    //await x.findRelated("customers", 1, "employees");
+    await x.findRelated("customers", 1, "employees", {}, "firstname desc");
 
     //await x.impersonate(3);
 

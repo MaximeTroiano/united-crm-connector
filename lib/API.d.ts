@@ -76,7 +76,7 @@ declare class API {
      * @description Get related elements of record
      * @returns The requested data
      */
-    findRelated: (entity: string, id: number, relation: string) => Promise<any>;
+    findRelated: (entity: string, id: number, relation: string, where?: object, order?: string) => Promise<any>;
     /**
      * @description Save an element to the database
      * @returns The resulting data
