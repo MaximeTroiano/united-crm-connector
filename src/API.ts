@@ -366,9 +366,11 @@ class API {
      * @returns The resulting data
      */
     public remove = async (entity: string, id: number) => {
-        if (this.onRemove) this.onRemove(entity, id);
-
         this.log.request(0, "Remove", entity, id);
+
+        if (this.onRemove)
+            if (!(await this.onRemove(entity, id))) return this.log.error(1, "Canceled");
+
         return this.instance
             .delete(`/data/${entity}/${id}`, this.authHeader())
             .then(result => {
