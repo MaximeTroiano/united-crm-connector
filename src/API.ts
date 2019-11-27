@@ -338,7 +338,7 @@ class API {
             .post(`/data/${entity}/${entityId}/${relation}/${relationId}`, data, this.authHeader())
             .then(result => {
                 if (this.afterSaveRelated)
-                    this.afterSaveRelated(entity, entityId, relation, relationId, data);
+                    this.afterSaveRelated(entity, entityId, relation, relationId, data, result);
                 return result;
             })
             .then(this.handleResponse)
@@ -364,7 +364,7 @@ class API {
             .delete(`/data/${entity}/${entityId}/${relation}/${relationId}`, this.authHeader())
             .then(result => {
                 if (this.afterDeleteRelated)
-                    this.afterDeleteRelated(entity, entityId, relation, relationId);
+                    this.afterDeleteRelated(entity, entityId, relation, relationId, result);
                 return result;
             })
             .then(this.handleResponse)
