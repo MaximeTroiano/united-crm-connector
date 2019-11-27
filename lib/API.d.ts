@@ -90,12 +90,14 @@ declare class API {
      */
     saveRelated: (entity: string, entityId: number, relation: string, relationId: number, data?: object) => Promise<any>;
     onSaveRelated: Function;
+    afterSaveRelated: Function;
     /**
      * @description Save a relation to the database
      * @returns The resulting data
      */
     deleteRelated: (entity: string, entityId: number, relation: string, relationId: number) => Promise<any>;
     onDeleteRelated: Function;
+    afterDeleteRelated: Function;
     /**
      * @description Removes an element from the database
      * @returns The resulting data

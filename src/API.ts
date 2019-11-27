@@ -336,10 +336,16 @@ class API {
         this.log.request(0, "Save related", entity, entityId, relation, relationId);
         return this.instance
             .post(`/data/${entity}/${entityId}/${relation}/${relationId}`, data, this.authHeader())
+            .then(result => {
+                if (this.afterSaveRelated)
+                    this.afterSaveRelated(entity, entityId, relation, relationId, data);
+                return result;
+            })
             .then(this.handleResponse)
             .catch(this.handleError);
     };
     public onSaveRelated!: Function;
+    public afterSaveRelated!: Function;
 
     /**
      * @description Save a relation to the database
@@ -356,10 +362,16 @@ class API {
         this.log.request(0, "Delete related", entity, entityId, relation, relationId);
         return this.instance
             .delete(`/data/${entity}/${entityId}/${relation}/${relationId}`, this.authHeader())
+            .then(result => {
+                if (this.afterDeleteRelated)
+                    this.afterDeleteRelated(entity, entityId, relation, relationId);
+                return result;
+            })
             .then(this.handleResponse)
             .catch(this.handleError);
     };
     public onDeleteRelated!: Function;
+    public afterDeleteRelated!: Function;
 
     /**
      * @description Removes an element from the database
