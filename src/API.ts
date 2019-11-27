@@ -357,9 +357,12 @@ class API {
         relation: string,
         relationId: number
     ) => {
-        if (this.onDeleteRelated) this.onDeleteRelated(entity, entityId, relation, relationId);
-
         this.log.request(0, "Delete related", entity, entityId, relation, relationId);
+
+        if (this.onDeleteRelated)
+            if (!(await this.onDeleteRelated(entity, entityId, relation, relationId)))
+                return this.log.error(1, "Canceled");
+
         return this.instance
             .delete(`/data/${entity}/${entityId}/${relation}/${relationId}`, this.authHeader())
             .then(result => {
