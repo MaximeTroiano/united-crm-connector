@@ -351,7 +351,7 @@ class API {
      * @description Save a relation to the database
      * @returns The resulting data
      */
-    public deleteRelated = async (
+    public removeRelated = async (
         entity: string,
         entityId: number,
         relation: string,
@@ -359,22 +359,22 @@ class API {
     ) => {
         this.log.request(0, "Delete related", entity, entityId, relation, relationId);
 
-        if (this.onDeleteRelated)
-            if (!(await this.onDeleteRelated(entity, entityId, relation, relationId)))
+        if (this.onRemoveRelated)
+            if (!(await this.onRemoveRelated(entity, entityId, relation, relationId)))
                 return this.log.error(1, "Canceled");
 
         return this.instance
             .delete(`/data/${entity}/${entityId}/${relation}/${relationId}`, this.authHeader())
             .then(result => {
-                if (this.afterDeleteRelated)
-                    this.afterDeleteRelated(entity, entityId, relation, relationId, result);
+                if (this.afterRemoveRelated)
+                    this.afterRemoveRelated(entity, entityId, relation, relationId, result);
                 return result;
             })
             .then(this.handleResponse)
             .catch(this.handleError);
     };
-    public onDeleteRelated!: Function;
-    public afterDeleteRelated!: Function;
+    public onRemoveRelated!: Function;
+    public afterRemoveRelated!: Function;
 
     /**
      * @description Removes an element from the database
