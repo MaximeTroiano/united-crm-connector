@@ -222,7 +222,19 @@ class API {
     public getListValues = async (listName: string) => {
         this.log.request(0, "List of values", listName);
         return this.instance
-            .get(`/list/${listName}`, this.authHeader())
+            .get(`/lists/${listName}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Get the lists of values
+     * @returns The requested data
+     */
+    public getLists = async () => {
+        this.log.request(0, "Lists of values");
+        return this.instance
+            .get(`/lists`, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
@@ -231,10 +243,10 @@ class API {
      * @description Get the list of values for a list
      * @returns The requested data
      */
-    public createListValue = async (listName: string, labels: object, values: object = {}) => {
+    public saveListValue = async (listName: string, labels: object, attributes: object = {}) => {
         this.log.request(0, "List of values", listName);
         return this.instance
-            .post(`/list/${listName}`, { labels, values }, this.authHeader())
+            .post(`/lists/${listName}`, { labels, attributes }, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };

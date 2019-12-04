@@ -17,12 +17,12 @@ const test = async () => {
         console.log("Custom save function", entity, data);
     };
 
-    await x.createListValue(
+    await x.saveListValue(
         "lov_employees_contract",
         { en: "Test" },
         { description: "This means a test contract" }
     );
-    await x.createListValue("lov_employees_contract", { en: "None" });
+    await x.saveListValue("lov_employees_contract", { en: "None" });
 
     await x.getListValues("lov_employees_contract");
 

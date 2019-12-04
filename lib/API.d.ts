@@ -53,10 +53,15 @@ declare class API {
      */
     getListValues: (listName: string) => Promise<any>;
     /**
+     * @description Get the lists of values
+     * @returns The requested data
+     */
+    getLists: () => Promise<any>;
+    /**
      * @description Get the list of values for a list
      * @returns The requested data
      */
-    createListValue: (listName: string, labels: object, values?: object) => Promise<any>;
+    saveListValue: (listName: string, labels: object, attributes?: object) => Promise<any>;
     /**
      * @description Get the list of any entity with a search criteria
      * @returns The requested data
