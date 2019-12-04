@@ -243,10 +243,10 @@ class API {
      * @description Get the list of values for a list
      * @returns The requested data
      */
-    public saveListValue = async (listName: string, labels: object, attributes: object = {}) => {
+    public saveListValue = async (listName: string, data: object) => {
         this.log.request(0, "List of values", listName);
         return this.instance
-            .post(`/lists/${listName}`, { labels, attributes }, this.authHeader())
+            .post(`/lists/${listName}`, data, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
