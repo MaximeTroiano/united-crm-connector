@@ -159,7 +159,8 @@ class API {
         if (this.debug_level >= 2) this.log.message(1, "Generate auth header");
         return {
             headers: {
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${this.token}`,
+                ...extraHeaders
             }
         };
     };
