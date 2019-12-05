@@ -159,8 +159,7 @@ class API {
         if (this.debug_level >= 2) this.log.message(1, "Generate auth header");
         return {
             headers: {
-                Authorization: `Bearer ${this.token}`,
-                ...extraHeaders
+                Authorization: `Bearer ${this.token}`
             }
         };
     };
@@ -188,7 +187,7 @@ class API {
             .then(this.handleResponse)
             .then(token => {
                 if (this.debug_level == 3) this.log.result(1, "Token length", token.data.length);
-                this.token = token.data;
+                this.token = token.data.token;
                 return token;
             })
             .catch(this.handleError);
