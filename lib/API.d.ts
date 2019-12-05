@@ -119,6 +119,6 @@ declare class API {
      * @description Uploads a file to the server
      * @returns The resulting id etc
      */
-    uploadFile: (fileName: string, chunkBlob: any) => Promise<any>;
+    uploadFile: (fileName: string, chunkBlob: any, folderId?: number | undefined) => Promise<any>;
 }
 export default API;
