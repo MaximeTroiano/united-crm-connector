@@ -155,11 +155,12 @@ class API {
         }
     };
 
-    private authHeader = () => {
+    private authHeader = (extraHeaders?: any) => {
         if (this.debug_level >= 2) this.log.message(1, "Generate auth header");
         return {
             headers: {
-                Authorization: `Bearer ${this.token}`
+                Authorization: `Bearer ${this.token}`,
+                ...extraHeaders
             }
         };
     };
@@ -415,11 +416,34 @@ class API {
      * @returns The resulting data
      */
     public config = async (entity: string | null = null) => {
-        const URL = !entity ? "/config" : `/config/${entity}`;
-
         this.log.request(0, "Config", entity || "global");
+
+        const URL = !entity ? "/config" : `/config/${entity}`;
         return this.instance
             .get(URL, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Uploads a file to the server
+     * @returns The resulting id etc
+     */
+    public uploadFile = async (fileName: string, chunkBlob: any) => {
+        this.log.request(0, "Upload", fileName);
+
+        let data = new FormData();
+        data.append("file", chunkBlob);
+
+        return this.instance
+            .post(
+                `/files`,
+                data,
+                this.authHeader({
+                    "Content-Type": "multipart/form-data",
+                    "x-file-name": fileName
+                })
+            )
             .then(this.handleResponse)
             .catch(this.handleError);
     };

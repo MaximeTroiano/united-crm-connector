@@ -115,5 +115,10 @@ declare class API {
      * @returns The resulting data
      */
     config: (entity?: string | null) => Promise<any>;
+    /**
+     * @description Uploads a file to the server
+     * @returns The resulting id etc
+     */
+    uploadFile: (fileName: string, chunkBlob: any) => Promise<any>;
 }
 export default API;
