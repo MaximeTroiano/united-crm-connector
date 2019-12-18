@@ -447,6 +447,19 @@ class API {
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+
+    /**
+     * @description Uploads a file to the server
+     * @returns The resulting id etc
+     */
+    public downloadFile = async (fileId: number) => {
+        this.log.request(0, "Download", fileId);
+
+        return this.instance
+            .get(`/data/files/${fileId}/download`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
 }
 
 export default API;
