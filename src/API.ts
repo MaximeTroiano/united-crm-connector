@@ -155,9 +155,10 @@ class API {
         }
     };
 
-    private authHeader = (extraHeaders?: any) => {
+    private authHeader = (extraHeaders?: any, extraOptions: any = {}) => {
         if (this.debug_level >= 2) this.log.message(1, "Generate auth header");
         return {
+            ...extraOptions,
             headers: {
                 Authorization: `Bearer ${this.token}`,
                 ...extraHeaders
@@ -457,7 +458,7 @@ class API {
         this.log.request(0, "Download", fileId);
 
         return this.instance
-            .get(`/data/files/${fileId}/download`, this.authHeader())
+            .get(`/data/files/${fileId}/download`, this.authHeader({}, { responseType: "blob" }))
             .then(this.handleResponse)
             .catch(this.handleError);
     };
