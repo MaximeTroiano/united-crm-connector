@@ -20,8 +20,6 @@ const test = async () => {
     x.api_timeout = 100000;
     let file = await x.downloadFile(361);
 
-    console.log("file", file);
-
     //await x.find("users");
 
     //await x.saveRelated("customers", 1, "employees", 2);
