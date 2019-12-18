@@ -440,7 +440,6 @@ class API {
                 `/files`,
                 data,
                 this.authHeader({
-                    "Content-Type": "multipart/form-data",
                     "x-file-name": fileName,
                     "x-folder-id": folderId || 0
                 })
