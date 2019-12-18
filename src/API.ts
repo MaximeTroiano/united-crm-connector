@@ -434,7 +434,6 @@ class API {
 
         let data = new FormData();
         data.append("file", chunkBlob);
-        data.append("meta", fileData);
 
         return this.instance
             .post(
@@ -442,6 +441,7 @@ class API {
                 data,
                 this.authHeader({
                     "x-file-name": fileData.name,
+                    "x-file-type": fileData.type,
                     "x-folder-id": folderId || 0
                 })
             )
