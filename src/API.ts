@@ -434,6 +434,7 @@ class API {
 
         let data = new FormData();
         data.append("file", chunkBlob);
+        data.append("meta", fileData);
 
         return this.instance
             .post(
