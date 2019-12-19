@@ -121,9 +121,14 @@ declare class API {
      */
     uploadFile: (fileData: any, chunkBlob: any, folderId?: number | undefined) => Promise<any>;
     /**
+     * @description Downloads a file from the server
+     * @returns The file :-)
+     */
+    downloadFile: (fileId: number) => Promise<any>;
+    /**
      * @description Uploads a file to the server
      * @returns The resulting id etc
      */
-    downloadFile: (fileId: number) => Promise<any>;
+    calculateKpi: (type: string, query: object) => Promise<any>;
 }
 export default API;

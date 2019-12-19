@@ -451,14 +451,26 @@ class API {
     };
 
     /**
-     * @description Uploads a file to the server
-     * @returns The resulting id etc
+     * @description Downloads a file from the server
+     * @returns The file :-)
      */
     public downloadFile = async (fileId: number) => {
         this.log.request(0, "Download", fileId);
 
         return this.instance
             .get(`/data/files/${fileId}/download`, this.authHeader({}, { responseType: "blob" }))
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Uploads a file to the server
+     * @returns The resulting id etc
+     */
+    public calculateKpi = async (type: string, query: object) => {
+        this.log.request(0, "Calculate KPI", type);
+        return this.instance
+            .post(`/kpi`, { type, query }, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
