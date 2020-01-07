@@ -160,6 +160,7 @@ class API {
         return {
             ...extraOptions,
             headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
                 Authorization: `Bearer ${this.token}`,
                 ...extraHeaders
             }
