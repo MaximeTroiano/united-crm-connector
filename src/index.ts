@@ -7,7 +7,7 @@ const test = async () => {
     let start = new Date().getTime();
     x.debug_level = 3;
 
-    await x.login("Maxime", "test");
+    await x.login("admin", "admin");
 
     x.onError = (error: any) => {
         console.log("Custom error handling is working !!", error);
@@ -18,9 +18,9 @@ const test = async () => {
     };
 
     x.api_timeout = 100000;
-    let file = await x.downloadFile(361);
+    //let file = await x.downloadFile(361);
 
-    //await x.find("users");
+    await x.find("users");
 
     //await x.saveRelated("customers", 1, "employees", 2);
 
@@ -28,7 +28,7 @@ const test = async () => {
 
     //await x.impersonate(3);
 
-    //let company = await x.save("customers", { name: "gaëtan's Company", vat: "BE0589.625.366" });
+    let company = await x.save("customers", { name: "gaëtan's Company", vat: "BE0589.625.366" });
     //await x.find("customers");
 
     //await x.findOne("customers", { name: "Maxime's Company" });
