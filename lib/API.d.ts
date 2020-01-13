@@ -17,7 +17,7 @@ declare class API {
     private api_url?;
     /** @description The timeout time to the API */
     api_timeout: number;
-    constructor(api_url: string);
+    constructor(api_url: string, api_timeout?: number);
     /**
      * @description Init the Axios instance with the URL and headers
      * @returns An axios instance

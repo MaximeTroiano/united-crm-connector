@@ -30,9 +30,12 @@ class API {
     public api_timeout: number = 3000;
 
     // * CONSTRUCTOR *
-    constructor(api_url: string) {
+    constructor(api_url: string, api_timeout: number = 3000) {
         if (!api_url) throw new Error("No API url has been set");
+
         this.api_url = api_url;
+        this.api_timeout = api_timeout;
+
         this.instance = this.init();
     }
 
