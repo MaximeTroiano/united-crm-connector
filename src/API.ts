@@ -27,7 +27,7 @@ class API {
     private api_url?: string;
 
     /** @description The timeout time to the API */
-    public api_timeout: number = 1000;
+    public api_timeout: number = 3000;
 
     // * CONSTRUCTOR *
     constructor(api_url: string) {
