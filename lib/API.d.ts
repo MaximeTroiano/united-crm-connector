@@ -1,5 +1,4 @@
 import "regenerator-runtime/runtime";
-import { ApiPosition } from "./interfaces/ApiPosition";
 declare class API {
     /** @description This variable contains the token of the user */
     token: string;
@@ -66,17 +65,17 @@ declare class API {
      * @description Get the list of any entity with a search criteria
      * @returns The requested data
      */
-    search: (entity: string, search: string, position?: ApiPosition, order?: string) => Promise<any>;
+    search: (entity: string, search: string, options?: object) => Promise<any>;
     /**
      * @description Get one element of an entity
      * @returns The requested data
      */
-    findOne: (entity: string, where: object) => Promise<any>;
+    findOne: (entity: string, options?: object) => Promise<any>;
     /**
      * @description Get one element of an entity
      * @returns The requested data
      */
-    findById: (entity: string, id: number) => Promise<any>;
+    findById: (entity: string, id: number, options?: object) => Promise<any>;
     /**
      * @description Get related elements of record
      * @returns The requested data

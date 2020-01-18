@@ -249,16 +249,11 @@ class API {
      * @description Get the list of any entity with a search criteria
      * @returns The requested data
      */
-    public search = async (
-        entity: string,
-        search: string,
-        position: ApiPosition = { take: 50, skip: 0 },
-        order: string = ""
-    ) => {
-        this.log.request(0, "Search", entity, search, position.skip || 0, position.take || 50);
+    public search = async (entity: string, search: string, options: object = {}) => {
+        this.log.request(0, "Search", entity, search);
         return this.instance
             .get(
-                `/data/${entity}?search=${search}&skip=${position.skip}&take=${position.take}&order=${order}`,
+                `/data/${entity}?search=${search}&options=${JSON.stringify(options)}`,
                 this.authHeader()
             )
             .then(this.handleResponse)
@@ -269,10 +264,10 @@ class API {
      * @description Get one element of an entity
      * @returns The requested data
      */
-    public findOne = async (entity: string, where: object) => {
+    public findOne = async (entity: string, options: object = {}) => {
         this.log.request(0, "Find one", entity);
         return this.instance
-            .get(`/data/${entity}/one?where=${JSON.stringify(where)}`, this.authHeader())
+            .get(`/data/${entity}/one?options=${JSON.stringify(options)}`, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
@@ -281,10 +276,10 @@ class API {
      * @description Get one element of an entity
      * @returns The requested data
      */
-    public findById = async (entity: string, id: number) => {
+    public findById = async (entity: string, id: number, options: object = {}) => {
         this.log.request(0, "Find by id", entity, id);
         return this.instance
-            .get(`/data/${entity}/${id}`, this.authHeader())
+            .get(`/data/${entity}/${id}?options=${JSON.stringify(options)}`, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
