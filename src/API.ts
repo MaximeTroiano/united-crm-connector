@@ -253,7 +253,7 @@ class API {
         this.log.request(0, "Search", entity, search);
         return this.instance
             .get(
-                `/data/${entity}?search=${search}&options=${JSON.stringify(options)}`,
+                `/data/${entity}/search?search=${search}&options=${JSON.stringify(options)}`,
                 this.authHeader()
             )
             .then(this.handleResponse)
