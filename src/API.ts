@@ -202,20 +202,10 @@ class API {
      * @description Get the list of any entity
      * @returns The requested data
      */
-    public find = async (
-        entity: string,
-        where: object = {},
-        position: ApiPosition = { take: 50, skip: 0 },
-        order: string = ""
-    ) => {
-        this.log.request(0, "Find", entity, position.skip || 0, position.take || 50);
+    public find = async (entity: string, options: object = {}) => {
+        this.log.request(0, "Find", entity);
         return this.instance
-            .get(
-                `/data/${entity}?where=${JSON.stringify(where)}&skip=${position.skip}&take=${
-                    position.take
-                }&order=${order}`,
-                this.authHeader()
-            )
+            .get(`/data/${entity}?options=${JSON.stringify(options)}`, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
