@@ -418,16 +418,13 @@ class API {
      * @description Uploads a file to the server
      * @returns The resulting id etc
      */
-    public uploadFile = async (fileData: any, chunkBlob: any, folderId?: number) => {
+    public uploadFile = async (fileData: any, file: any, folderId?: number) => {
         this.log.request(0, "Upload", fileData.name);
-
-        let data = new FormData();
-        data.append("file", chunkBlob);
 
         return this.instance
             .post(
                 `/files`,
-                data,
+                file,
                 this.authHeader({
                     "x-file-name": fileData.name,
                     "x-file-type": fileData.type,
