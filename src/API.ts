@@ -459,6 +459,18 @@ class API {
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+
+    /**
+     * @description Launches a custom function
+     * @returns The resulting data
+     */
+    public exec = async (functionName: string, data: object) => {
+        this.log.request(0, "Exec function", functionName);
+        return this.instance
+            .post(`/exec/${functionName}`, data, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
 }
 
 export default API;
