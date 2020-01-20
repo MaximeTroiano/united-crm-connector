@@ -428,8 +428,8 @@ class API {
                 this.authHeader({
                     "x-file-name": fileData.name,
                     "x-file-type": fileData.type,
-                    "x-entity": fileData.entity,
-                    "x-entity-id": fileData.entityId,
+                    "x-relation": fileData.relation,
+                    "x-relation-id": fileData.relationId,
                     "x-folder-id": folderId || 0
                 })
             )
