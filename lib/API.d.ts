@@ -129,5 +129,10 @@ declare class API {
      * @returns The resulting id etc
      */
     calculateKpi: (type: string, query: object) => Promise<any>;
+    /**
+     * @description Launches a custom function
+     * @returns The resulting data
+     */
+    exec: (functionName: string, data: object) => Promise<any>;
 }
 export default API;
