@@ -292,12 +292,14 @@ class API {
         entity: string,
         id: number,
         relation: string,
-        where: object = {},
-        order: string = ""
+        options: object = {}
     ) => {
         this.log.request(0, "Find related of id", entity, id);
         return this.instance
-            .get(`/data/${entity}/${id}/${relation}?order=${order}`, this.authHeader())
+            .get(
+                `/data/${entity}/${id}/${relation}?options=${JSON.stringify(options)}`,
+                this.authHeader()
+            )
             .then(this.handleResponse)
             .catch(this.handleError);
     };
@@ -421,6 +423,10 @@ class API {
     public uploadFile = async (fileData: any, file: any, folderId?: number) => {
         this.log.request(0, "Upload", fileData.name);
 
+        if (this.onUploadFile)
+            if (!(await this.onUploadFile(fileData, file, folderId)))
+                return this.log.error(1, "Canceled");
+
         return this.instance
             .post(
                 `/files`,
@@ -433,9 +439,15 @@ class API {
                     "x-folder-id": folderId || 0
                 })
             )
+            .then(result => {
+                if (this.afterUploadFile) this.afterUploadFile(fileData, file, folderId, result);
+                return result;
+            })
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+    public onUploadFile!: Function;
+    public afterUploadFile!: Function;
 
     /**
      * @description Downloads a file from the server

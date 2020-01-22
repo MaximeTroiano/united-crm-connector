@@ -80,7 +80,7 @@ declare class API {
      * @description Get related elements of record
      * @returns The requested data
      */
-    findRelated: (entity: string, id: number, relation: string, where?: object, order?: string) => Promise<any>;
+    findRelated: (entity: string, id: number, relation: string, options?: object) => Promise<any>;
     /**
      * @description Save an element to the database
      * @returns The resulting data
@@ -119,6 +119,8 @@ declare class API {
      * @returns The resulting id etc
      */
     uploadFile: (fileData: any, file: any, folderId?: number | undefined) => Promise<any>;
+    onUploadFile: Function;
+    afterUploadFile: Function;
     /**
      * @description Downloads a file from the server
      * @returns The file :-)
