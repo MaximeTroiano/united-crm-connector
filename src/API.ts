@@ -305,6 +305,29 @@ class API {
     };
 
     /**
+     * @description Get related elements of record
+     * @returns The requested data
+     */
+    public findOneRelated = async (
+        entity: string,
+        entityId: number,
+        relation: string,
+        relationId: number,
+        options: object = {}
+    ) => {
+        this.log.request(0, "Find one related of id", entity, entityId);
+        return this.instance
+            .get(
+                `/data/${entity}/${entityId}/${relation}/${relationId}?options=${JSON.stringify(
+                    options
+                )}`,
+                this.authHeader()
+            )
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
      * @description Save an element to the database
      * @returns The resulting data
      */
