@@ -1,6 +1,7 @@
 import "regenerator-runtime/runtime";
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from "axios";
 import colors from "./const/colors";
+import https from "https";
 import { ApiPosition } from "./interfaces/ApiPosition";
 
 class API {
@@ -49,7 +50,10 @@ class API {
 
         return axios.create({
             baseURL: this.api_url,
-            timeout: this.api_timeout
+            timeout: this.api_timeout,
+            httpsAgent: new https.Agent({
+                rejectUnauthorized: false
+            })
         });
     };
 
