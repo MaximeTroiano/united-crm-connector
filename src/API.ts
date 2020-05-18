@@ -52,8 +52,8 @@ class API {
             baseURL: this.api_url,
             timeout: this.api_timeout,
             httpsAgent: new https.Agent({
-                rejectUnauthorized: false
-            })
+                rejectUnauthorized: false,
+            }),
         });
     };
 
@@ -78,7 +78,7 @@ class API {
             this.log.error(1, `The endpoint didn't respond after ${this.api_timeout}ms`);
             return {
                 name: "SERVER_DOWN",
-                message: "The server is currently unavailable"
+                message: "The server is currently unavailable",
             };
         }
 
@@ -138,7 +138,7 @@ class API {
             console.log(
                 this.log.createIndent(i),
                 `${colors.fgyellow}[RESULT]`,
-                m.map(mm => JSON.stringify(mm)).join(" "),
+                m.map((mm) => JSON.stringify(mm)).join(" "),
                 colors.reset
             );
         },
@@ -159,7 +159,7 @@ class API {
                 indent += "    ";
             }
             return indent;
-        }
+        },
     };
 
     private authHeader = (extraHeaders?: any, extraOptions: any = {}) => {
@@ -168,8 +168,8 @@ class API {
             ...extraOptions,
             headers: {
                 Authorization: `Bearer ${this.token}`,
-                ...extraHeaders
-            }
+                ...extraHeaders,
+            },
         };
     };
 
@@ -194,7 +194,7 @@ class API {
         return this.instance
             .post("/auth/login", { username, password })
             .then(this.handleResponse)
-            .then(token => {
+            .then((token) => {
                 if (this.debug_level == 3) this.log.result(1, "Token length", token.data.length);
                 this.token = token.data.token;
                 return token;
@@ -341,7 +341,7 @@ class API {
         this.log.request(0, "Save", entity);
         return this.instance
             .post(`/data/${entity}`, data, this.authHeader())
-            .then(result => {
+            .then((result) => {
                 if (this.afterSave) this.afterSave(entity, data, result);
                 return result;
             })
@@ -367,7 +367,7 @@ class API {
         this.log.request(0, "Save related", entity, entityId, relation, relationId);
         return this.instance
             .post(`/data/${entity}/${entityId}/${relation}/${relationId}`, data, this.authHeader())
-            .then(result => {
+            .then((result) => {
                 if (this.afterSaveRelated)
                     this.afterSaveRelated(entity, entityId, relation, relationId, data, result);
                 return result;
@@ -396,7 +396,7 @@ class API {
 
         return this.instance
             .delete(`/data/${entity}/${entityId}/${relation}/${relationId}`, this.authHeader())
-            .then(result => {
+            .then((result) => {
                 if (this.afterRemoveRelated)
                     this.afterRemoveRelated(entity, entityId, relation, relationId, result);
                 return result;
@@ -419,7 +419,7 @@ class API {
 
         return this.instance
             .delete(`/data/${entity}/${id}`, this.authHeader())
-            .then(result => {
+            .then((result) => {
                 if (this.afterDelete) this.afterDelete(entity, id, result);
                 return result;
             })
@@ -444,6 +444,19 @@ class API {
     };
 
     /**
+     * @description Removes an element from the database
+     * @returns The resulting data
+     */
+    public database = async (func: string, parameters: object = {}) => {
+        this.log.request(0, "database", func);
+
+        return this.instance
+            .post(`/database/${func}`, parameters, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
      * @description Uploads a file to the server
      * @returns The resulting id etc
      */
@@ -463,10 +476,10 @@ class API {
                     "x-file-type": fileData.type,
                     "x-relation": fileData.relation,
                     "x-relation-id": fileData.relationId,
-                    "x-folder-id": folderId || 0
+                    "x-folder-id": folderId || 0,
                 })
             )
-            .then(result => {
+            .then((result) => {
                 if (this.afterUploadFile) this.afterUploadFile(fileData, file, folderId, result);
                 return result;
             })

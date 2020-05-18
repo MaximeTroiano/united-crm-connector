@@ -120,6 +120,11 @@ declare class API {
      */
     config: (entity?: string | null) => Promise<any>;
     /**
+     * @description Removes an element from the database
+     * @returns The resulting data
+     */
+    database: (func: string, parameters?: object) => Promise<any>;
+    /**
      * @description Uploads a file to the server
      * @returns The resulting id etc
      */
