@@ -509,10 +509,7 @@ class API {
     public calculateKpi = async (type: string, query: object) => {
         this.log.request(0, "Calculate KPI", type);
         return this.instance
-            .get(
-                `/kpi?type=${type}&query=${encodeURIComponent(JSON.stringify(query))}`,
-                this.authHeader()
-            )
+            .post(`/kpi`, { type, query }, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
