@@ -249,6 +249,18 @@ class API {
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+
+    /**
+     * @description Get the list of values for a list
+     * @returns The requested data
+     */
+    public removeListValue = async (listName: string, id: number) => {
+        this.log.request(0, "Delete element of list of values", listName);
+        return this.instance
+            .delete(`/lists/${listName}/${id}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
     /**
      * @description Get the list of any entity with a search criteria
      * @returns The requested data
