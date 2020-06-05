@@ -196,6 +196,7 @@ class API {
             .post("/auth/login", { username, password })
             .then(this.handleResponse)
             .then((token) => {
+                if (!token.data) return this.handleError(token);
                 if (this.debug_level == 3) this.log.result(1, "Token length", token.data.length);
                 this.token = token.data.token;
                 return token;
