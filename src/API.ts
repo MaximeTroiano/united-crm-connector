@@ -59,7 +59,6 @@ class API {
 
     public onError!: Function;
     private handleResponse = (response: AxiosResponse<any>) => {
-        console.log("response", response);
         if (this.debug_level >= 2) this.log.message(1, "Response is being handled");
         // Get the result data of the request
         let data = response.data;
@@ -75,7 +74,6 @@ class API {
     };
 
     private handleError = (data: any) => {
-        console.log("data", data);
         if (!data) {
             this.log.error(1, `The endpoint didn't respond after ${this.api_timeout}ms`);
             return {
@@ -83,6 +81,9 @@ class API {
                 message: "The server is currently unavailable",
             };
         }
+
+        if (data.name) return data;
+        if (data.error) return data.error;
 
         if (this.debug_level >= 2) this.log.message(1, "Response was of type error");
         // Get the result data of the request
