@@ -74,7 +74,7 @@ class API {
     };
 
     private handleError = (response: AxiosResponse<any>) => {
-        if (!response.data) {
+        if (!response) {
             this.log.error(1, `The endpoint didn't respond after ${this.api_timeout}ms`);
             return {
                 name: "SERVER_DOWN",
@@ -85,6 +85,7 @@ class API {
         if (this.debug_level >= 2) this.log.message(1, "Response was of type error");
         // Get the result data of the request
         let data = response.data;
+        console.log("response", response);
 
         // Log the error
         this.log.error(1, data.error.name, data.error.message);
