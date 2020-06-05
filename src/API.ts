@@ -74,7 +74,7 @@ class API {
     };
 
     private handleError = (response: AxiosResponse<any>) => {
-        if (!response) {
+        if (!response.data) {
             this.log.error(1, `The endpoint didn't respond after ${this.api_timeout}ms`);
             return {
                 name: "SERVER_DOWN",
