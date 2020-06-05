@@ -59,6 +59,7 @@ class API {
 
     public onError!: Function;
     private handleResponse = (response: AxiosResponse<any>) => {
+        console.log("response", response);
         if (this.debug_level >= 2) this.log.message(1, "Response is being handled");
         // Get the result data of the request
         let data = response.data;
@@ -74,6 +75,7 @@ class API {
     };
 
     private handleError = (data: any) => {
+        console.log("data", data);
         if (!data) {
             this.log.error(1, `The endpoint didn't respond after ${this.api_timeout}ms`);
             return {
@@ -194,7 +196,7 @@ class API {
             .post("/auth/login", { username, password })
             .then(this.handleResponse)
             .then((token) => {
-                if (!token.data) return this.handleError(token.data);
+                if (!token.data) return this.handleError(token);
                 if (this.debug_level == 3) this.log.result(1, "Token length", token.data.length);
                 this.token = token.data.token;
                 return token;
