@@ -82,16 +82,18 @@ class API {
             };
         }
 
-        if (data.name) return data;
-        if (data.error) return data.error;
+        if (data.name || data.error) {
+            if (this.onError) this.onError(data.error);
+
+            if (data.name) return data;
+            else return data.error;
+        }
 
         if (this.debug_level >= 2) this.log.message(1, "Response was of type error");
         // Get the result data of the request
 
         // Log the error
         this.log.error(1, data.error.name, data.error.message);
-
-        if (this.onError) this.onError(data.error);
 
         // Return the error
         return data.error;
