@@ -226,7 +226,7 @@ class API {
     public setNewPassword = async (token: string, password: string) => {
         this.log.request(0, "setNewPassword", token);
         return this.instance
-            .post(`/auth/resetPassword`, { token, password }, this.authHeader())
+            .post(`/auth/setNewPassword`, { token, password }, this.authHeader())
             .then(this.handleResponse)
             .catch(this.handleError);
     };
