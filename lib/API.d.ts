@@ -42,6 +42,16 @@ declare class API {
      */
     login: (username: string, password: string) => Promise<any>;
     /**
+     * @description Generate a reset password token => This is send by email
+     * @returns The resulting data
+     */
+    resetPassword: (username: string) => Promise<any>;
+    /**
+     * @description Generate a reset password token => This is send by email
+     * @returns The resulting data
+     */
+    setNewPassword: (token: string, password: string) => Promise<any>;
+    /**
      * @description Get the list of any entity
      * @returns The requested data
      */

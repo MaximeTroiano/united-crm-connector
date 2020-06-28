@@ -208,6 +208,30 @@ class API {
     };
 
     /**
+     * @description Generate a reset password token => This is send by email
+     * @returns The resulting data
+     */
+    public resetPassword = async (username: string) => {
+        this.log.request(0, "resetPassword", username);
+        return this.instance
+            .post(`/auth/resetPassword`, { username }, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
+     * @description Generate a reset password token => This is send by email
+     * @returns The resulting data
+     */
+    public setNewPassword = async (token: string, password: string) => {
+        this.log.request(0, "setNewPassword", token);
+        return this.instance
+            .post(`/auth/resetPassword`, { token, password }, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
      * @description Get the list of any entity
      * @returns The requested data
      */
