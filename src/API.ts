@@ -75,7 +75,7 @@ class API {
 
     private handleError = (data: any) => {
         if (!data) {
-            this.log.error(1, `The endpoint didn't respond after ${this.api_timeout}ms`);
+            this.log.error(1, `Something is wrong with your internet connection`);
             return {
                 name: "SERVER_DOWN",
                 message: "The server is currently unavailable",
