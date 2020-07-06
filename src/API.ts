@@ -530,9 +530,9 @@ class API {
             if (!(await this.onUploadFile(fileData, file, folderId)))
                 return this.log.error(1, "Canceled");
 
-        return this.instance
+        return axios
             .post(
-                `/files`,
+                `${this.api_url}/files`,
                 file,
                 this.authHeader({
                     "x-file-name": fileData.name,
@@ -544,7 +544,7 @@ class API {
             )
             .then((result: any) => {
                 if (this.afterUploadFile) this.afterUploadFile(fileData, file, folderId, result);
-                return result;
+                return result.data;
             })
             .then(this.handleResponse)
             .catch(this.handleError);
@@ -559,9 +559,12 @@ class API {
     public downloadFile = async (fileId: number) => {
         this.log.request(0, "Download", fileId);
 
-        return this.instance
-            .get(`/data/files/${fileId}/download`, this.authHeader({}, { responseType: "blob" }))
-            .then(this.handleResponse)
+        return axios
+            .get(
+                `${this.api_url}/data/files/${fileId}/download`,
+                this.authHeader({}, { responseType: "blob" })
+            )
+            .then(({ data }) => this.handleResponse(data))
             .catch(this.handleError);
     };
 
