@@ -1,8 +1,8 @@
 import "regenerator-runtime/runtime";
-import axios from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import colors from "./const/colors";
 import https from "https";
-import fetch from "node-fetch";
+import { ApiPosition } from "./interfaces/ApiPosition";
 
 class API {
     // * VARIABLES *
@@ -22,7 +22,7 @@ class API {
     private end!: number;
 
     /** @description The variable that will contain the AXIOS instance */
-    private instance: any;
+    private instance: AxiosInstance;
 
     /** @description The URL to the CRM backend */
     private api_url?: string;
@@ -48,41 +48,20 @@ class API {
     private init = () => {
         if (this.debug_level >= 2) this.log.message(1, "Axios has been intitialized");
 
-        return {
-            post: async (path: string, body: any, headers: any = {}) => {
-                let response = await fetch(`${this.api_url}${path}`, {
-                    method: "POST",
-                    headers: { ...headers.headers, "Content-Type": "application/json" },
-                    body: body && typeof body === "object" ? JSON.stringify(body) : body,
-                });
-
-                return response.json();
-            },
-
-            get: async (path: string, headers: any) => {
-                let response = await fetch(`${this.api_url}${path}`, {
-                    method: "GET",
-                    headers: { ...headers.headers, "Content-Type": "application/json" },
-                });
-
-                return response.json();
-            },
-
-            delete: async (path: string, headers: any) => {
-                let response = await fetch(`${this.api_url}${path}`, {
-                    method: "DELETE",
-                    headers: { ...headers.headers, "Content-Type": "application/json" },
-                });
-
-                return response.json();
-            },
-        };
+        return axios.create({
+            baseURL: this.api_url,
+            timeout: this.api_timeout,
+            httpsAgent: new https.Agent({
+                rejectUnauthorized: false,
+            }),
+        });
     };
 
     public onError!: Function;
-    private handleResponse = (data: any) => {
+    private handleResponse = (response: AxiosResponse<any>) => {
         if (this.debug_level >= 2) this.log.message(1, "Response is being handled");
         // Get the result data of the request
+        let data = response.data;
 
         // If no success, redirect to the error function
         if (!data.success) return this.handleError(data);
@@ -219,12 +198,11 @@ class API {
         return this.instance
             .post("/auth/login", { username, password })
             .then(this.handleResponse)
-            .then((data: any) => {
-                if (!data.success || !data.data.token) return this.handleError(data.data);
-                if (this.debug_level == 3)
-                    this.log.result(1, "Token length", data.data.token.length);
-                this.token = data.data.token;
-                return data;
+            .then((token) => {
+                if (!token.data) return this.handleError(token);
+                if (this.debug_level == 3) this.log.result(1, "Token length", token.data.length);
+                this.token = token.data.token;
+                return token;
             })
             .catch(this.handleError);
     };
@@ -404,7 +382,7 @@ class API {
         this.log.request(0, "Save", entity);
         return this.instance
             .post(`/data/${entity}`, data, this.authHeader())
-            .then((result: any) => {
+            .then((result) => {
                 if (this.afterSave) this.afterSave(entity, data, result);
                 return result;
             })
@@ -430,7 +408,7 @@ class API {
         this.log.request(0, "Save related", entity, entityId, relation, relationId);
         return this.instance
             .post(`/data/${entity}/${entityId}/${relation}/${relationId}`, data, this.authHeader())
-            .then((result: any) => {
+            .then((result) => {
                 if (this.afterSaveRelated)
                     this.afterSaveRelated(entity, entityId, relation, relationId, data, result);
                 return result;
@@ -459,7 +437,7 @@ class API {
 
         return this.instance
             .delete(`/data/${entity}/${entityId}/${relation}/${relationId}`, this.authHeader())
-            .then((result: any) => {
+            .then((result) => {
                 if (this.afterRemoveRelated)
                     this.afterRemoveRelated(entity, entityId, relation, relationId, result);
                 return result;
@@ -482,7 +460,7 @@ class API {
 
         return this.instance
             .delete(`/data/${entity}/${id}`, this.authHeader())
-            .then((result: any) => {
+            .then((result) => {
                 if (this.afterDelete) this.afterDelete(entity, id, result);
                 return result;
             })
@@ -530,9 +508,9 @@ class API {
             if (!(await this.onUploadFile(fileData, file, folderId)))
                 return this.log.error(1, "Canceled");
 
-        return axios
+        return this.instance
             .post(
-                `${this.api_url}/files`,
+                `/files`,
                 file,
                 this.authHeader({
                     "x-file-name": fileData.name,
@@ -542,9 +520,9 @@ class API {
                     "x-folder-id": folderId || 0,
                 })
             )
-            .then((result: any) => {
+            .then((result) => {
                 if (this.afterUploadFile) this.afterUploadFile(fileData, file, folderId, result);
-                return result.data;
+                return result;
             })
             .then(this.handleResponse)
             .catch(this.handleError);
@@ -559,12 +537,9 @@ class API {
     public downloadFile = async (fileId: number) => {
         this.log.request(0, "Download", fileId);
 
-        return axios
-            .get(
-                `${this.api_url}/data/files/${fileId}/download`,
-                this.authHeader({}, { responseType: "blob" })
-            )
-            .then(({ data }) => this.handleResponse(data))
+        return this.instance
+            .get(`/data/files/${fileId}/download`, this.authHeader({}, { responseType: "blob" }))
+            .then(this.handleResponse)
             .catch(this.handleError);
     };
 
