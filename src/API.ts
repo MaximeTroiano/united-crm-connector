@@ -50,17 +50,16 @@ class API {
 
         return {
             post: async (path: string, body: any, headers: any = {}) => {
-                return fetch(`${this.api_url}${path}`, {
+                let response = await fetch(`${this.api_url}${path}`, {
                     method: "POST",
                     headers: { ...headers.headers, "Content-Type": "application/json" },
-                    body: JSON.stringify(body),
-                })
-                    .then((response) => response.json())
-                    .catch((e) => console.log(e));
+                    body: body && typeof body === "object" ? JSON.stringify(body) : body,
+                });
+
+                return response.json();
             },
 
             get: async (path: string, headers: any) => {
-                console.log("headers", { ...headers, "Content-Type": "application/json" });
                 let response = await fetch(`${this.api_url}${path}`, {
                     method: "GET",
                     headers: { ...headers.headers, "Content-Type": "application/json" },
