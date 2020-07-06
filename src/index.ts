@@ -5,9 +5,10 @@ let x = new API("https://localhost:4000");
 const test = async () => {
     console.log("[TEST] Started");
     let start = new Date().getTime();
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     x.debug_level = 3;
 
-    await x.login("admin", "admin");
+    await x.login("admin", "A6EBfJm6Vh");
 
     x.onError = (error: any) => {
         console.log("Custom error handling is working !!", error);
@@ -28,7 +29,7 @@ const test = async () => {
 
     //await x.impersonate(3);
 
-    let company = await x.save("customers", { name: "gaëtan's Company", vat: "BE0589.625.366" });
+    // let company = await x.save("customers", { name: "gaëtan's Company", vat: "BE0589.625.366" });
     //await x.find("customers");
 
     //await x.findOne("customers", { name: "Maxime's Company" });
