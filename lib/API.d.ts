@@ -161,5 +161,10 @@ declare class API {
      * @returns The resulting data
      */
     exec: (functionName: string, data: object) => Promise<any>;
+    /**
+     * @description Get the SAAS settings
+     * @returns The requested data
+     */
+    getSaasSettings: () => Promise<any>;
 }
 export default API;

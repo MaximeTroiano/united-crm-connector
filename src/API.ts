@@ -566,6 +566,18 @@ class API {
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+
+    /**
+     * @description Get the SAAS settings
+     * @returns The requested data
+     */
+    public getSaasSettings = async () => {
+        this.log.request(0, "GetSaasSettings");
+        return this.instance
+            .get(`/saas`, { headers: { secret: "21th6dr/5t1qze3r51F6*<S85G4QE85E1Y6E*" } })
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
 }
 
 export default API;
