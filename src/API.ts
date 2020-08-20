@@ -512,13 +512,16 @@ class API {
             .post(
                 `/files`,
                 file,
-                this.authHeader({
-                    "x-file-name": fileData.name,
-                    "x-file-type": fileData.type,
-                    "x-relation": fileData.relation,
-                    "x-relation-id": fileData.relationId,
-                    "x-folder-id": folderId || 0,
-                })
+                this.authHeader(
+                    {
+                        "x-file-name": fileData.name,
+                        "x-file-type": fileData.type,
+                        "x-relation": fileData.relation,
+                        "x-relation-id": fileData.relationId,
+                        "x-folder-id": folderId || 0,
+                    },
+                    { timeout: 60000 }
+                )
             )
             .then((result) => {
                 if (this.afterUploadFile) this.afterUploadFile(fileData, file, folderId, result);
