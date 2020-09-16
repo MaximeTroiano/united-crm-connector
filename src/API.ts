@@ -304,6 +304,22 @@ class API {
             .then(this.handleResponse)
             .catch(this.handleError);
     };
+    /**
+     * @description Get the list of any entity with a search criteria
+     * @returns The requested data
+     */
+    public changes = async (
+        entity: string,
+        entityId: number,
+        relation?: string,
+        relationId?: number
+    ) => {
+        this.log.request(0, "Changes", entity);
+        return this.instance
+            .get(`/changes/${entity}/${entityId}`, this.authHeader())
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
 
     /**
      * @description Get one element of an entity

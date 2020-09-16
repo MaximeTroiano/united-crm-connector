@@ -82,6 +82,11 @@ declare class API {
      */
     search: (entity: string, search: string, options?: object) => Promise<any>;
     /**
+     * @description Get the list of any entity with a search criteria
+     * @returns The requested data
+     */
+    changes: (entity: string, entityId: number, relation?: string | undefined, relationId?: number | undefined) => Promise<any>;
+    /**
      * @description Get one element of an entity
      * @returns The requested data
      */
