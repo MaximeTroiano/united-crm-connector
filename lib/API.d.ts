@@ -114,6 +114,11 @@ declare class API {
     onSave: Function;
     afterSave: Function;
     /**
+     * @description Save an element to the database
+     * @returns The resulting data
+     */
+    silent_save: (entity: string, data: object) => Promise<any>;
+    /**
      * @description Save a relation to the database
      * @returns The resulting data
      */

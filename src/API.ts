@@ -1,8 +1,7 @@
-import "regenerator-runtime/runtime";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import colors from "./const/colors";
 import https from "https";
-import { ApiPosition } from "./interfaces/ApiPosition";
+import "regenerator-runtime/runtime";
+import colors from "./const/colors";
 
 class API {
     // * VARIABLES *
@@ -407,6 +406,21 @@ class API {
     };
     public onSave!: Function;
     public afterSave!: Function;
+
+    /**
+     * @description Save an element to the database
+     * @returns The resulting data
+     */
+    public silent_save = async (entity: string, data: object) => {
+        this.log.request(0, "Save", entity);
+        return this.instance
+            .post(`/data/${entity}`, data, this.authHeader())
+            .then((result) => {
+                return result;
+            })
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
 
     /**
      * @description Save a relation to the database
