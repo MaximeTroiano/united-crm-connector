@@ -522,7 +522,7 @@ class API {
         this.log.request(0, "database", func);
 
         return this.instance
-            .post(`/database/${func}`, parameters, this.authHeader())
+            .post(`/database/${func}`, parameters, this.authHeader({}, { timeout: 120000 }))
             .then(this.handleResponse)
             .catch(this.handleError);
     };
