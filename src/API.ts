@@ -596,7 +596,7 @@ class API {
     public exec = async (functionName: string, data: object) => {
         this.log.request(0, "Exec function", functionName);
         return this.instance
-            .post(`/exec/${functionName}`, data, this.authHeader())
+            .post(`/exec/${functionName}`, data, this.authHeader({}, { timeout: 120000 }))
             .then(this.handleResponse)
             .catch(this.handleError);
     };
