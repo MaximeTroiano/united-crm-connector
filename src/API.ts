@@ -602,6 +602,22 @@ class API {
     };
 
     /**
+     * @description Trigger socket
+     * @returns Nothing
+     */
+    public triggerSocket = async (socketIdentifier: string, data: object) => {
+        this.log.request(0, "Trigger socket", socketIdentifier);
+        return this.instance
+            .post(
+                `/live-events/${socketIdentifier}/trigger`,
+                data,
+                this.authHeader({}, { timeout: 120000 })
+            )
+            .then(this.handleResponse)
+            .catch(this.handleError);
+    };
+
+    /**
      * @description Get the SAAS settings
      * @returns The requested data
      */

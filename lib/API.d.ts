@@ -172,6 +172,11 @@ declare class API {
      */
     exec: (functionName: string, data: object) => Promise<any>;
     /**
+     * @description Trigger socket
+     * @returns Nothing
+     */
+    triggerSocket: (socketIdentifier: string, data: object) => Promise<any>;
+    /**
      * @description Get the SAAS settings
      * @returns The requested data
      */
