@@ -508,7 +508,7 @@ class API {
         this.log.request(0, "Config", entity || "global");
 
         let URL = !entity ? "/config" : `/config/${entity}`;
-        URL += "?nocache=" + new Date().getTime() * Math.random();
+        //URL += "?nocache=" + new Date().getTime() * Math.random();
         return this.instance
             .get(URL, this.authHeader())
             .then(this.handleResponse)
